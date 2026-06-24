@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagementApp
 {
@@ -9,20 +9,20 @@ namespace HotelManagementApp
     {
         private static readonly string ConnectionString =
             ConfigurationManager.ConnectionStrings["HotelDb"]?.ConnectionString ??
-            "server=localhost;database=hotel_management;uid=root;pwd=;SslMode=none;Allow User Variables=True;";
+            "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=hotel;Integrated Security=True;TrustServerCertificate=True;MultipleActiveResultSets=True;";
 
-        public static DataTable ExecuteSelect(string sql, params MySqlParameter[] parameters)
+        public static DataTable ExecuteSelect(string sql, params SqlParameter[] parameters)
         {
             var table = new DataTable();
-            using (var connection = new MySqlConnection(ConnectionString))
-            using (var command = new MySqlCommand(sql, connection))
+            using (var connection = new SqlConnection(ConnectionString))
+            using (var command = new SqlCommand(sql, connection))
             {
                 if (parameters != null && parameters.Length > 0)
                 {
                     command.Parameters.AddRange(parameters);
                 }
 
-                using (var adapter = new MySqlDataAdapter(command))
+                using (var adapter = new SqlDataAdapter(command))
                 {
                     adapter.Fill(table);
                 }
@@ -31,10 +31,10 @@ namespace HotelManagementApp
             return table;
         }
 
-        public static int ExecuteNonQuery(string sql, params MySqlParameter[] parameters)
+        public static int ExecuteNonQuery(string sql, params SqlParameter[] parameters)
         {
-            using (var connection = new MySqlConnection(ConnectionString))
-            using (var command = new MySqlCommand(sql, connection))
+            using (var connection = new SqlConnection(ConnectionString))
+            using (var command = new SqlCommand(sql, connection))
             {
                 if (parameters != null && parameters.Length > 0)
                 {

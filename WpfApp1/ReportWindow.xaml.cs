@@ -37,19 +37,18 @@ namespace HotelManagementApp
             dgReport.ItemsSource = _reportData.DefaultView;
 
             decimal revenue = Convert.ToDecimal(HotelDb.ExecuteSelect(@"
-                SELECT IFNULL(SUM(CostTotal), 0)
+                SELECT ISNULL(SUM(CostTotal), 0)
                 FROM Rezervare
-                WHERE StatusRezervare IN ('Подтверждено', 'Завершено')").Rows[0][0]);
+                WHERE StatusRezervare = 'ACTIV'").Rows[0][0]);
 
             lblRevenue.Text = revenue.ToString("0.00") + " lei";
 
             DataTable topRoom = HotelDb.ExecuteSelect(@"
-                SELECT cam.NumarCamera, COUNT(*) AS TotalCount
+                SELECT TOP (1) cam.NumarCamera, COUNT(*) AS TotalCount
                 FROM Rezervare r
                 INNER JOIN Camera cam ON cam.IdCamera = r.IdCamera
                 GROUP BY cam.IdCamera, cam.NumarCamera
-                ORDER BY TotalCount DESC, cam.NumarCamera
-                LIMIT 1");
+                ORDER BY TotalCount DESC, cam.NumarCamera");
 
             lblTopRoom.Text = topRoom.Rows.Count > 0
                 ? topRoom.Rows[0]["NumarCamera"] + " (" + topRoom.Rows[0]["TotalCount"] + ")"
@@ -58,7 +57,7 @@ namespace HotelManagementApp
             int confirmed = Convert.ToInt32(HotelDb.ExecuteSelect(@"
                 SELECT COUNT(*)
                 FROM Rezervare
-                WHERE StatusRezervare = 'Подтверждено'").Rows[0][0]);
+                WHERE StatusRezervare = 'ACTIV'").Rows[0][0]);
 
             lblConfirmedCount.Text = confirmed.ToString();
         }
@@ -97,7 +96,7 @@ namespace HotelManagementApp
                 builder.AppendLine();
                 builder.AppendLine("Общая сумма дохода: " + lblRevenue.Text);
                 builder.AppendLine("Номер с наибольшим количеством бронирований: " + lblTopRoom.Text);
-                builder.AppendLine("Подтвержденных бронирований: " + lblConfirmedCount.Text);
+                builder.AppendLine("Активных бронирований: " + lblConfirmedCount.Text);
 
                 File.WriteAllText(dialog.FileName, builder.ToString(), Encoding.UTF8);
                 MessageBox.Show("Отчет сохранен.");

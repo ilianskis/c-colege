@@ -3,7 +3,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagementApp
 {
@@ -39,14 +39,14 @@ namespace HotelManagementApp
             dgReservations.SelectedItem = null;
         }
 
-        private static MySqlParameter P(string name, object value) => new MySqlParameter(name, value ?? DBNull.Value);
+        private static SqlParameter P(string name, object value) => new SqlParameter(name, value ?? DBNull.Value);
 
-        private void ExecuteNonQuery(string sql, params MySqlParameter[] parameters)
+        private void ExecuteNonQuery(string sql, params SqlParameter[] parameters)
         {
             HotelDb.ExecuteNonQuery(sql, parameters);
         }
 
-        private DataTable ExecuteSelect(string sql, params MySqlParameter[] parameters)
+        private DataTable ExecuteSelect(string sql, params SqlParameter[] parameters)
         {
             return HotelDb.ExecuteSelect(sql, parameters);
         }
@@ -177,7 +177,7 @@ namespace HotelManagementApp
                 LoadAllData();
                 ClearRoomInputs();
             }
-            catch (MySqlException ex)
+            catch (SqlException ex)
             {
                 MessageBox.Show("Ошибка сохранения номера: " + ex.Message);
             }
@@ -224,7 +224,7 @@ namespace HotelManagementApp
                 LoadAllData();
                 ClearRoomInputs();
             }
-            catch (MySqlException ex)
+            catch (SqlException ex)
             {
                 MessageBox.Show("Ошибка обновления номера: " + ex.Message);
             }
@@ -253,7 +253,7 @@ namespace HotelManagementApp
                 LoadAllData();
                 ClearRoomInputs();
             }
-            catch (MySqlException ex)
+            catch (SqlException ex)
             {
                 MessageBox.Show("Ошибка удаления номера: " + ex.Message);
             }
@@ -388,7 +388,7 @@ namespace HotelManagementApp
                 LoadAllData();
                 ClearClientInputs();
             }
-            catch (MySqlException ex)
+            catch (SqlException ex)
             {
                 MessageBox.Show("Ошибка сохранения клиента: " + ex.Message);
             }
@@ -435,7 +435,7 @@ namespace HotelManagementApp
                 LoadAllData();
                 ClearClientInputs();
             }
-            catch (MySqlException ex)
+            catch (SqlException ex)
             {
                 MessageBox.Show("Ошибка обновления клиента: " + ex.Message);
             }
@@ -464,7 +464,7 @@ namespace HotelManagementApp
                 LoadAllData();
                 ClearClientInputs();
             }
-            catch (MySqlException ex)
+            catch (SqlException ex)
             {
                 MessageBox.Show("Ошибка удаления клиента: " + ex.Message);
             }
@@ -559,7 +559,7 @@ namespace HotelManagementApp
                 return;
             }
 
-            if (!string.Equals(status, "Отменено", StringComparison.OrdinalIgnoreCase) && !IsRoomAvailable(roomId, checkIn, checkOut, reservationId))
+            if (!string.Equals(status, "NEACTIV", StringComparison.OrdinalIgnoreCase) && !IsRoomAvailable(roomId, checkIn, checkOut, reservationId))
             {
                 MessageBox.Show("Выбранный номер уже занят на этот период.");
                 return;
@@ -605,7 +605,7 @@ namespace HotelManagementApp
                 LoadAllData();
                 ClearReservationInputs();
             }
-            catch (MySqlException ex)
+            catch (SqlException ex)
             {
                 MessageBox.Show("Ошибка сохранения бронирования: " + ex.Message);
             }
@@ -677,7 +677,7 @@ namespace HotelManagementApp
                 SELECT COUNT(*)
                 FROM Rezervare
                 WHERE IdCamera = @roomId
-                  AND StatusRezervare <> 'Отменено'
+                  AND StatusRezervare <> 'NEACTIV'
                   AND IdRezervare <> @id
                   AND DataCheckIn < @checkOut
                   AND DataCheckOut > @checkIn",
@@ -699,10 +699,10 @@ namespace HotelManagementApp
 
             try
             {
-                ExecuteNonQuery("UPDATE Rezervare SET StatusRezervare = 'Отменено' WHERE IdRezervare = @id", P("@id", _selectedReservationId));
+                ExecuteNonQuery("UPDATE Rezervare SET StatusRezervare = 'NEACTIV' WHERE IdRezervare = @id", P("@id", _selectedReservationId));
                 LoadAllData();
             }
-            catch (MySqlException ex)
+            catch (SqlException ex)
             {
                 MessageBox.Show("Ошибка отмены бронирования: " + ex.Message);
             }
@@ -731,7 +731,7 @@ namespace HotelManagementApp
                 LoadAllData();
                 ClearReservationInputs();
             }
-            catch (MySqlException ex)
+            catch (SqlException ex)
             {
                 MessageBox.Show("Ошибка удаления бронирования: " + ex.Message);
             }

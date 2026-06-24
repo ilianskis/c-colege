@@ -200,9 +200,8 @@
                             <StackPanel>
                                 <TextBlock Text="Статус"/>
                                 <ComboBox x:Name="cmbReservationStatus">
-                                    <ComboBoxItem Content="Подтверждено"/>
-                                    <ComboBoxItem Content="Отменено"/>
-                                    <ComboBoxItem Content="Завершено"/>
+                                    <ComboBoxItem Content="ACTIV"/>
+                                    <ComboBoxItem Content="NEACTIV"/>
                                 </ComboBox>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
