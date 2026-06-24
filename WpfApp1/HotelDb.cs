@@ -11,6 +11,11 @@ namespace HotelManagementApp
             ConfigurationManager.ConnectionStrings["HotelDb"]?.ConnectionString ??
             "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=hotel;Integrated Security=True;TrustServerCertificate=True;MultipleActiveResultSets=True;";
 
+        public static string GetConnectionString()
+        {
+            return ConnectionString;
+        }
+
         public static DataTable ExecuteSelect(string sql, params SqlParameter[] parameters)
         {
             var table = new DataTable();
