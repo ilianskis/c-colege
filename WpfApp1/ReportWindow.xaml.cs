@@ -20,8 +20,7 @@ namespace HotelManagementApp
         private void LoadReport()
         {
             _reportData = HotelDb.ExecuteSelect(@"
-                SELECT r.IdRezervare,
-                       cam.NumarCamera,
+                SELECT cam.NumarCamera,
                        cam.TipCamera,
                        CONCAT(cl.Nume, ' ', cl.Prenume) AS Client,
                        r.DataCheckIn,
