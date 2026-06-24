@@ -1,0 +1,73 @@
+﻿<Window x:Class="HotelManagementApp.ReportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Краткий отчет по бронированиям"
+        Height="760" Width="1180"
+        Background="#0F172A" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <SolidColorBrush x:Key="PanelBg" Color="#1E293B"/>
+        <SolidColorBrush x:Key="AccentColor" Color="#38BDF8"/>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="4,0"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Background" Value="{StaticResource AccentColor}"/>
+            <Setter Property="Foreground" Value="#0F172A"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="Margin" Value="6"/>
+            <Setter Property="Background" Value="{StaticResource PanelBg}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="RowBackground" Value="{StaticResource PanelBg}"/>
+            <Setter Property="AlternatingRowBackground" Value="#293548"/>
+            <Setter Property="AutoGenerateColumns" Value="True"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Background="{StaticResource PanelBg}" CornerRadius="10" Padding="14" Margin="0,0,0,10">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Краткий отчет по бронированиям" FontSize="24" FontWeight="Bold" Foreground="{StaticResource AccentColor}"/>
+                    <TextBlock Text="Комната, тип, клиент, период, ночи, статус и стоимость"/>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <Button Content="Обновить" Click="BtnRefresh_Click"/>
+                    <Button Content="Экспорт TXT" Click="BtnExportTxt_Click"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid x:Name="dgReport" Grid.Column="0"/>
+
+            <Border Grid.Column="1" Background="{StaticResource PanelBg}" CornerRadius="10" Padding="16" Margin="8,6,6,6">
+                <StackPanel>
+                    <TextBlock Text="Общие показатели" FontSize="20" FontWeight="Bold" Foreground="{StaticResource AccentColor}" Margin="0,0,0,16"/>
+                    <TextBlock Text="Общая сумма дохода"/>
+                    <TextBlock x:Name="lblRevenue" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <TextBlock Text="Номер с наибольшим количеством бронирований"/>
+                    <TextBlock x:Name="lblTopRoom" FontSize="18" FontWeight="Bold" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                    <TextBlock Text="Подтвержденных бронирований"/>
+                    <TextBlock x:Name="lblConfirmedCount" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
